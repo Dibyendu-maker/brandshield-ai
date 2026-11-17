@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  brandshield-app:
+    build: .
+    container_name: brandshield-ai-platform
+    ports:
+      - "8000:8000"
+      - "8501:8501"
+    environment:
+      - SECRET_KEY=brandshield-docker-prod-secret-2026
+      - DATABASE_URL=sqlite:///./brandshield.db
+      - CHROMA_PERSIST_DIR=./chroma_data
+      - UPLOAD_DIR=./uploads
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - API_BASE_URL=http://localhost:8000/api/v1
+    volumes:
+      - ./chroma_data:/app/chroma_data
+      - ./uploads:/app/uploads
+      - ./brandshield.db:/app/brandshield.db
+    restart: unless-stopped
